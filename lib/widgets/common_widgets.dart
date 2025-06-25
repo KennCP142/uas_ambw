@@ -21,11 +21,12 @@ class CustomButton extends StatelessWidget {
       return OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: AppConfig.primaryColor),
+          side: BorderSide(color: AppConfig.primaryColor, width: 2),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          foregroundColor: AppConfig.primaryColor,
         ),
         child: isLoading
             ? SizedBox(
@@ -38,12 +39,26 @@ class CustomButton extends StatelessWidget {
                   ),
                 ),
               )
-            : Text(text),
+            : Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       );
     }
 
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppConfig.primaryColor,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        elevation: 4,
+        shadowColor: AppConfig.primaryColor.withOpacity(0.3),
+      ),
       child: isLoading
           ? const SizedBox(
               height: 20,
@@ -53,7 +68,10 @@ class CustomButton extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             )
-          : Text(text),
+          : Text(
+              text,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
     );
   }
 }

@@ -7,7 +7,6 @@ import 'package:uas_ambw/providers/activity_provider.dart';
 import 'package:uas_ambw/providers/auth_provider.dart';
 import 'package:uas_ambw/utils/utils.dart';
 import 'package:uas_ambw/widgets/common_widgets.dart';
-import 'package:uuid/uuid.dart';
 
 class AddActivityScreen extends StatefulWidget {
   final dynamic activity;
@@ -156,6 +155,26 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
     }
   }
 
+  // Helper method for back navigation
+  void _handleBackNavigation() {
+    print('Back button pressed - attempting navigation');
+    try {
+      // First try to pop the current route
+      if (Navigator.canPop(context)) {
+        print('Navigator can pop - using Navigator.pop()');
+        Navigator.pop(context);
+      } else {
+        // If no route to pop, navigate to home
+        print('Navigator cannot pop - using context.go("/home")');
+        context.go('/home');
+      }
+    } catch (e) {
+      // Fallback navigation in case of any errors
+      print('Navigation error: $e - using fallback context.go("/home")');
+      context.go('/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final activityProvider = Provider.of<ActivityProvider>(context);
@@ -163,6 +182,14 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isEditing ? 'Edit Activity' : 'Add Activity'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: _handleBackNavigation,
+          tooltip: 'Back',
+        ),
+        backgroundColor: AppConfig.primaryColor,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Form(
         key: _formKey,
