@@ -12,7 +12,10 @@ class AppRouter {
     initialLocation: '/',
     routes: [
       GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
-      GoRoute(path: '/get-started', builder: (context, state) => const GetStartedScreen()),
+      GoRoute(
+        path: '/get-started',
+        builder: (context, state) => const GetStartedScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/signup',

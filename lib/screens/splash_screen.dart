@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final StorageService _storageService = StorageService();
-  
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Check if this is the first launch
     final isFirstLaunch = await _storageService.isFirstLaunch();
-    
+
     // Initialize auth provider
     await authProvider.initialize();
 
@@ -74,13 +74,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      AppConfig.primaryColor,
-                      AppConfig.secondaryColor,
-                    ],
+                    colors: [AppConfig.primaryColor, AppConfig.secondaryColor],
                   ),
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: AppConfig.primaryColor.withOpacity(0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
