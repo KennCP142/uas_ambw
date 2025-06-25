@@ -89,6 +89,35 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+          // User greeting section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppConfig.primaryColor.withOpacity(0.1),
+                  AppConfig.secondaryColor.withOpacity(0.1),
+                ],
+              ),
+            ),
+            child: Consumer<AuthProvider>(
+              builder: (context, authProvider, child) {
+                final userName = authProvider.currentUser?.name ?? 'User';
+                return Text(
+                  'Hello, $userName!',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppConfig.primaryColor,
+                  ),
+                );
+              },
+            ),
+          ),
+
           // Date selector
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
