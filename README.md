@@ -33,11 +33,6 @@
 - Onboarding screens for first-time users
 - Skips to login or home screen for returning users
 
-### Clean UI and Navigation
-- Material Design 3 with custom theme
-- Intuitive navigation using GoRouter
-- State management with Provider
-
 ## Setup Instructions
 
 1. Clone the repository
