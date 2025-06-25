@@ -6,7 +6,12 @@
 2. Run the app:
    ```
    flutter pub get
-   flutter run
+   flutter run 
+   ```
+3. Demo Credentials
+   ```
+   E-MAIL: kenncahyaputra142@gmail.com
+   PASSWORD: 12345678
    ```
 ## Screenshots
 ![alt text](public/screenshots/get_started_screen.png)
