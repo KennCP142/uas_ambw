@@ -40,6 +40,29 @@ class _SignupScreenState extends State<SignupScreen> {
     return null;
   }
 
+  // Helper method to parse and provide user-friendly error messages for signup
+  String _parseSignupErrorMessage(String error) {
+    final lowerError = error.toLowerCase();
+
+    if (lowerError.contains('user already registered') ||
+        lowerError.contains('email already exists') ||
+        lowerError.contains('already taken')) {
+      return 'An account with this email already exists. Please sign in instead.';
+    } else if (lowerError.contains('password') && lowerError.contains('weak')) {
+      return 'Password is too weak. Please use a stronger password with at least 6 characters.';
+    } else if (lowerError.contains('email') && lowerError.contains('invalid')) {
+      return 'Please enter a valid email address.';
+    } else if (lowerError.contains('network') ||
+        lowerError.contains('connection')) {
+      return 'Network error. Please check your internet connection and try again.';
+    } else if (lowerError.contains('too many requests') ||
+        lowerError.contains('rate limit')) {
+      return 'Too many signup attempts. Please wait a moment and try again.';
+    } else {
+      return 'Failed to create account. Please check your information and try again.';
+    }
+  }
+
   Future<void> _signup() async {
     if (_formKey.currentState?.validate() ?? false) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -57,7 +80,9 @@ class _SignupScreenState extends State<SignupScreen> {
         );
         context.go('/login');
       } else if (mounted && authProvider.error != null) {
-        Utils.showSnackBar(context, authProvider.error!, isError: true);
+        // Parse and display user-friendly error messages
+        String errorMessage = _parseSignupErrorMessage(authProvider.error!);
+        Utils.showSnackBar(context, errorMessage, isError: true);
       }
     }
   }

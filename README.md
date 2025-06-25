@@ -1,4 +1,13 @@
 # Daily Planner App
+
+## Setup Instructions
+
+1. Clone the repository
+2. Run the app:
+   ```
+   flutter pub get
+   flutter run
+   ```
 ## Screenshots
 ![alt text](public/screenshots/get_started_screen.png)
 ![alt text](public/screenshots/login_screen.png)
@@ -32,12 +41,3 @@
 ### Get Started Screen
 - Onboarding screens for first-time users
 - Skips to login or home screen for returning users
-
-## Setup Instructions
-
-1. Clone the repository
-2. Run the app:
-   ```
-   flutter pub get
-   flutter run
-   ```

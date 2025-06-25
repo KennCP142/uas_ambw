@@ -59,7 +59,12 @@ class AuthProvider with ChangeNotifier {
       _error = null;
       return user != null;
     } catch (e) {
-      _error = 'Failed to sign in: ${e.toString()}';
+      // Extract more specific error messages from Supabase
+      if (e.toString().contains('AuthException')) {
+        _error = e.toString();
+      } else {
+        _error = 'Authentication failed: ${e.toString()}';
+      }
       return false;
     } finally {
       _setLoading(false);
@@ -99,9 +104,11 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Clear errors
+  // Clear error message
   void clearError() {
-    _error = null;
-    notifyListeners();
+    if (_error != null) {
+      _error = null;
+      notifyListeners();
+    }
   }
 }
