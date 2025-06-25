@@ -122,15 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Forgot password
-                  TextButton(
-                    onPressed: () {
-                      // Add forgot password functionality
-                    },
-                    child: const Text('Forgot Password?'),
-                  ),
-                  const SizedBox(height: 24),
-
                   // Create account link
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

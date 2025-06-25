@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:uas_ambw/config/app_config.dart';
 import 'package:uas_ambw/models/activity.dart';
 import 'package:uas_ambw/providers/activity_provider.dart';
@@ -19,6 +20,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime _selectedDate = DateTime.now();
   bool _showOnlyPending = true;
+  bool _showCalendar = false;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
 
   @override
   void initState() {
@@ -35,21 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (authProvider.currentUser != null) {
       await activityProvider.loadActivities(authProvider.currentUser!.id);
-    }
-  }
-
-  void _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
     }
   }
 
@@ -102,53 +91,114 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // Date selector
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             decoration: BoxDecoration(
               color: AppConfig.primaryColor.withOpacity(0.1),
             ),
-            child: Row(
+            child: Column(
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, size: 18),
-                  onPressed: () {
-                    setState(() {
-                      _selectedDate = _selectedDate.subtract(
-                        const Duration(days: 1),
-                      );
-                    });
-                  },
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => _selectDate(context),
-                    child: Column(
-                      children: [
-                        Text(
-                          DateFormat('EEEE').format(_selectedDate),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          DateFormat('MMMM d, y').format(_selectedDate),
-                          style: TextStyle(color: AppConfig.secondaryTextColor),
-                        ),
-                      ],
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, size: 18),
+                      onPressed: () {
+                        setState(() {
+                          _selectedDate = _selectedDate.subtract(
+                            const Duration(days: 1),
+                          );
+                          _focusedDay = _selectedDate;
+                        });
+                      },
                     ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showCalendar = !_showCalendar;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  DateFormat('EEEE').format(_selectedDate),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  _showCalendar
+                                      ? Icons.keyboard_arrow_up
+                                      : Icons.keyboard_arrow_down,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              DateFormat('MMMM d, y').format(_selectedDate),
+                              style: TextStyle(
+                                color: AppConfig.secondaryTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                      onPressed: () {
+                        setState(() {
+                          _selectedDate = _selectedDate.add(
+                            const Duration(days: 1),
+                          );
+                          _focusedDay = _selectedDate;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                if (_showCalendar)
+                  TableCalendar(
+                    firstDay: DateTime.utc(2020, 1, 1),
+                    lastDay: DateTime.utc(2030, 12, 31),
+                    focusedDay: _focusedDay,
+                    calendarFormat: _calendarFormat,
+                    selectedDayPredicate: (day) {
+                      return isSameDay(_selectedDate, day);
+                    },
+                    onDaySelected: (selectedDay, focusedDay) {
+                      setState(() {
+                        _selectedDate = selectedDay;
+                        _focusedDay = focusedDay;
+                        _showCalendar = false; // hide calendar after selection
+                      });
+                    },
+                    onFormatChanged: (format) {
+                      setState(() {
+                        _calendarFormat = format;
+                      });
+                    },
+                    calendarStyle: CalendarStyle(
+                      todayDecoration: BoxDecoration(
+                        color: AppConfig.primaryColor.withOpacity(0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      selectedDecoration: BoxDecoration(
+                        color: AppConfig.primaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      markerDecoration: BoxDecoration(
+                        color: Colors.red.shade300,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    headerVisible: false,
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                  onPressed: () {
-                    setState(() {
-                      _selectedDate = _selectedDate.add(
-                        const Duration(days: 1),
-                      );
-                    });
-                  },
-                ),
               ],
             ),
           ),

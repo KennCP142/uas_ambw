@@ -3,22 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:uas_ambw/screens/add_activity_screen.dart';
 import 'package:uas_ambw/screens/auth/login_screen.dart';
 import 'package:uas_ambw/screens/auth/signup_screen.dart';
-import 'package:uas_ambw/screens/get_started_screen.dart';
 import 'package:uas_ambw/screens/home_screen.dart';
 import 'package:uas_ambw/screens/splash_screen.dart';
-import 'package:uas_ambw/services/storage_service.dart';
 
 class AppRouter {
-  static final StorageService _storageService = StorageService();
-
   static final GoRouter router = GoRouter(
     initialLocation: '/',
     routes: [
       GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
-      GoRoute(
-        path: '/get-started',
-        builder: (context, state) => const GetStartedScreen(),
-      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/signup',

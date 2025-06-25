@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:uas_ambw/providers/auth_provider.dart';
-import 'package:uas_ambw/services/storage_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,24 +11,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final StorageService _storageService = StorageService();
-
   @override
   void initState() {
     super.initState();
-    _checkFirstLaunch();
+    _checkAuthAndNavigate();
   }
 
-  Future<void> _checkFirstLaunch() async {
-    final isFirstLaunch = await _storageService.isFirstLaunch();
+  Future<void> _checkAuthAndNavigate() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     await authProvider.initialize();
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (isFirstLaunch) {
-        context.go('/get-started');
-      } else if (authProvider.isAuthenticated) {
+      if (authProvider.isAuthenticated) {
         context.go('/home');
       } else {
         context.go('/login');
